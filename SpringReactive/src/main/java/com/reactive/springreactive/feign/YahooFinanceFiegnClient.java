@@ -1,7 +1,6 @@
 package com.reactive.springreactive.feign;
 
 import com.reactive.springreactive.dto.Stock;
-import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import reactivefeign.spring.config.ReactiveFeignClient;

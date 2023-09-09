@@ -3,6 +3,7 @@ package com.reactive.springreactive.controller;
 import com.reactive.springreactive.feign.LongTaskApi;
 import com.reactive.springreactive.feign.LongTaskApiByWebClient;
 import com.reactive.springreactive.service.SearchServiceCenter;
+import com.reactive.springreactive.service.YahooFinanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -28,6 +29,9 @@ import java.util.UUID;
 public class TestController {
 
     @Autowired
+    private YahooFinanceService yahooFinanceService;
+
+    @Autowired
     private SearchServiceCenter searchServiceCenter;
 
     @Autowired
@@ -35,6 +39,28 @@ public class TestController {
 
     @Autowired
     private LongTaskApiByWebClient longTaskApiByWebClient;
+
+
+    @GetMapping("/demo1")
+    public Mono<String> demo1(){
+        return Mono.just("Hello WebFlux " + new Date() );
+    }
+
+    @GetMapping("/demo2")
+    public Flux<String> demo2(){
+        return Flux.just("Andy", "John", "Christine")
+                .map(name -> "Hello " + name + " " + new Date() + "\n") ;
+
+    }
+
+
+    @GetMapping("/{symbol}")
+    public Mono<String> searchSingle(@PathVariable String symbol) throws IOException {
+
+        return yahooFinanceService.searchSingle(symbol)
+                                  .map(s -> s.toString() + ", time : " + new Date());
+    }
+
 
     @GetMapping(value = "/subscribe/{symbol}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Object> subscribeSingle(@PathVariable String symbol){
@@ -56,35 +82,35 @@ public class TestController {
 
     }
 
-    @GetMapping("/{symbol}")
-    public Mono<String> test2(@PathVariable String symbol) throws IOException {
-
-        String traceId = UUID.randomUUID().toString();
-
-        System.out.println("main thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
-        Flux<Long> longFlux = Flux.interval(Duration.ofSeconds(1)).publish().autoConnect(1);
-        
-        return longTaskApi.getSum()
-                   .map(s -> {
-                       System.out.println("map thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
-
-                       return s + ", time : " + new Date();
-                   })
-                .publishOn(Schedulers.newSingle("publish" + traceId))
-                .subscribeOn(Schedulers.newSingle(traceId))
-                .doFirst(() -> {
-                    System.out.println("doFirst thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
-                })
-                .doOnSubscribe(s -> {
-                    System.out.println("doOnSubscribe thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
-                })
-                .doOnNext(s -> {
-                    System.out.println("doOnNext thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
-                })
-                .doOnCancel(() -> {
-                    System.out.println("doOnCancel thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
-                });
-    }
+//    @GetMapping("/{symbol}")
+//    public Mono<String> test2(@PathVariable String symbol) throws IOException {
+//
+//        String traceId = UUID.randomUUID().toString();
+//
+//        System.out.println("main thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
+//        Flux<Long> longFlux = Flux.interval(Duration.ofSeconds(1)).publish().autoConnect(1);
+//
+//        return longTaskApi.getSum()
+//                   .map(s -> {
+//                       System.out.println("map thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
+//
+//                       return s + ", time : " + new Date();
+//                   })
+//                .publishOn(Schedulers.newSingle("publish" + traceId))
+//                .subscribeOn(Schedulers.newSingle(traceId))
+//                .doFirst(() -> {
+//                    System.out.println("doFirst thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
+//                })
+//                .doOnSubscribe(s -> {
+//                    System.out.println("doOnSubscribe thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
+//                })
+//                .doOnNext(s -> {
+//                    System.out.println("doOnNext thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
+//                })
+//                .doOnCancel(() -> {
+//                    System.out.println("doOnCancel thread: " + Thread.currentThread().getName() + ", traceId: " + traceId);
+//                });
+//    }
 
     @GetMapping("/test")
     public Mono<String> test(){

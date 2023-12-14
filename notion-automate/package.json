@@ -1,0 +1,11 @@
+{
+  "name": "notion-automate",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "@notionhq/client": "^1.0.1",
+    "node-fetch": "^3.3.2"
+  }
+}

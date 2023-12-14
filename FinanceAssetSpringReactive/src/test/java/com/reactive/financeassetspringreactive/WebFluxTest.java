@@ -10,6 +10,11 @@ import reactor.core.publisher.Mono;
 public class WebFluxTest {
 
     @Test
+    public void testMonoJust(){
+
+    }
+
+    @Test
     public void testMono(){
 
         Mono.just("Andy")

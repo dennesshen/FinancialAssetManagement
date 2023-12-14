@@ -1,0 +1,3 @@
+**/node_modules/**
+*.notion_script*
+*.idea*

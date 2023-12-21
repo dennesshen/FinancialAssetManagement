@@ -18,6 +18,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'com.playtika.reactivefeign:feign-reactor-spring-cloud-starter:4.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-rsocket:3.2.0'
+
     compileOnly 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

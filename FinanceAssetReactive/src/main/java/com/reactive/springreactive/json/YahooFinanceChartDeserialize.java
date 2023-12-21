@@ -22,7 +22,7 @@ public class YahooFinanceChartDeserialize extends JsonDeserializer<Stock> {
         treeNode = treeNode.get("chart").get("result").get(0).get("meta");
 
         return new Stock(treeNode.get("symbol").asText(),
-                         treeNode.get("regularMarketPrice").asInt(),
+                         treeNode.get("regularMarketPrice").asText(),
                          treeNode.get("currency").asText());
 
      }

@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.math.BigDecimal;
+
 /**
  * @author christinehsieh on 2023/8/18
  */
@@ -20,10 +22,16 @@ import lombok.ToString;
 @JsonDeserialize(using = YahooFinanceChartDeserialize.class)
 public class Stock {
 
+    public Stock(String symbol, String recentPrice, String currency){
+        this.symbol = symbol;
+        this.recentPrice = new BigDecimal(recentPrice);
+        this.currency = currency;
+    }
+
     private String symbol;
 
     @JsonProperty("regularMarketPrice")
-    private Integer recentPrice;
+    private BigDecimal recentPrice;
 
     private String currency;
 

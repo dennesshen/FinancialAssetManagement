@@ -35,7 +35,7 @@ public class SearchStockPriceController {
     }
 
     @GetMapping(value = "/subscribe/{symbol}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Object> subscribeSingle(@PathVariable String symbol){
+    public Flux<Stock> subscribeSingle(@PathVariable String symbol){
 
         return searchServiceCenter.subscribeSingle(symbol);
 
